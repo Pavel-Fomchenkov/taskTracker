@@ -1,9 +1,44 @@
 package com.pavel_fomchenkov.tasktracker.service;
 
+import com.pavel_fomchenkov.tasktracker.dto.TaskDTO;
 import com.pavel_fomchenkov.tasktracker.model.Task;
 
 import java.util.List;
 
 public interface TaskService {
-    List<Task> getAll();
+    /**
+     * Создание новой задачи
+     *
+     * @return задача
+     */
+    Task create(Task task);
+
+    /**
+     * Создание новой задачи
+     *
+     * @return задача
+     */
+    Task create(TaskDTO taskDTO);
+
+    /**
+     * Получение списка всех задач
+     *
+     * @return задачи
+     */
+    List<TaskDTO> getAllDTO();
+
+    /**
+     * Получение задачи по id
+     *
+     * @param id идентификатор задачи
+     * @return задача
+     */
+    Task getById(Long id);
+
+    /**
+     * Удаление задачи по id
+     *
+     * @param id идентификатор задачи
+     */
+    void deleteTask(Long id);
 }

@@ -1,9 +1,9 @@
 package com.pavel_fomchenkov.tasktracker.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.mapping.Set;
 
 import java.util.*;
 
@@ -13,6 +13,7 @@ import java.util.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true, value = {"performers"})
 @Table(name = "tasks")
 public class Task {
     @Id
@@ -21,8 +22,8 @@ public class Task {
     @SequenceGenerator(name = "task_id_seq", sequenceName = "task_id_seq", allocationSize = 1)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id", nullable = false)
+    @ManyToOne
     private User author;
 
     @Column(name = "start_date", nullable = false)
@@ -45,6 +46,7 @@ public class Task {
 
     @JoinTable(name = "task_performers", joinColumns = @JoinColumn(name = "task_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
     @ManyToMany(fetch = FetchType.LAZY)
+    @JsonProperty("performers")
     private Collection<User> performers = new HashSet<>();
 
     @OneToMany(mappedBy = "task", fetch = FetchType.LAZY)

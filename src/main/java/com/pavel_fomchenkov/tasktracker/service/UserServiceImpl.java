@@ -1,6 +1,7 @@
 package com.pavel_fomchenkov.tasktracker.service;
 
 import com.pavel_fomchenkov.tasktracker.dto.UserDTO;
+import com.pavel_fomchenkov.tasktracker.exception.UserAlreadyExistsException;
 import com.pavel_fomchenkov.tasktracker.model.Role;
 import com.pavel_fomchenkov.tasktracker.model.User;
 import com.pavel_fomchenkov.tasktracker.repository.UserRepository;
@@ -38,11 +39,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public User create(User user) {
         if (repository.existsByUsername(user.getUsername())) {
-            // Заменить на свои исключения
-            throw new RuntimeException("Пользователь с таким именем уже существует");
+            throw new UserAlreadyExistsException("Пользователь с таким именем уже существует");
         }
         if (repository.existsByEmail(user.getEmail())) {
-            throw new RuntimeException("Пользователь с таким email уже существует");
+            throw new UserAlreadyExistsException("Пользователь с таким email уже существует");
         }
         return save(user);
     }
@@ -103,6 +103,7 @@ public class UserServiceImpl implements UserService {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         return getByUsername(username);
     }
+
     /**
      * Изменение данных текущего пользователя
      *
@@ -123,6 +124,7 @@ public class UserServiceImpl implements UserService {
         repository.save(userFromDb);
         return userFromDb;
     }
+
     /**
      * Изменение данных пользователя
      *

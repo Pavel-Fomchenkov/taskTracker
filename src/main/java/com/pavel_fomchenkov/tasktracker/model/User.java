@@ -1,5 +1,7 @@
 package com.pavel_fomchenkov.tasktracker.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -17,6 +19,8 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true, value = {"tasks", "authorities", "accountNonExpired", "accountNonLocked",
+        "credentialsNonExpired", "credentialsNonExpired", "enabled"})
 @Table(name = "users")
 public class User implements UserDetails {
     @Id
@@ -38,30 +42,36 @@ public class User implements UserDetails {
     @Column(name = "role", nullable = false)
     private Role role;
 
+    @JsonProperty("tasks")
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "performers")
     private Collection<Task> tasks = new HashSet<>();
 
     @Override
+    @JsonProperty("authorities")
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));
     }
 
     @Override
+    @JsonProperty("accountNonExpired")
     public boolean isAccountNonExpired() {
         return true;
     }
 
     @Override
+    @JsonProperty("accountNonLocked")
     public boolean isAccountNonLocked() {
         return true;
     }
 
     @Override
+    @JsonProperty("credentialsNonExpired")
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
     @Override
+    @JsonProperty("enabled")
     public boolean isEnabled() {
         return true;
     }
