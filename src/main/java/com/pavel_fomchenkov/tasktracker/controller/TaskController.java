@@ -62,7 +62,7 @@ public class TaskController {
      * @return задача
      */
     @GetMapping()
-    @Operation(summary = "Получение информации о всех задачах")
+    @Operation(summary = "Получение о задаче по id")
     public ResponseEntity<Task> getById(@RequestParam Long id) {
         Task task = service.getById(id);
 //        List<TaskDTO> tasks = service.getAll().stream().map(mapper::mapToTaskDTO).collect(Collectors.toList());
@@ -71,7 +71,12 @@ public class TaskController {
 
 
 //    UPDATE
-
+@PatchMapping
+@Operation(summary = "Редактирование задачи")
+public ResponseEntity<Task> editTask(@RequestBody Task task) {
+    task = service.editTask(task);
+    return ResponseEntity.ok(task);
+}
 
 
 

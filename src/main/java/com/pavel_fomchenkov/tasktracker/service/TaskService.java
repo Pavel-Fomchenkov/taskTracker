@@ -36,6 +36,14 @@ public interface TaskService {
     Task getById(Long id);
 
     /**
+     * Редактирование задачи
+     *
+     * @param task задача
+     * @return обновленная задача
+     */
+    Task editTask(Task task);
+
+    /**
      * Удаление задачи по id
      *
      * @param id идентификатор задачи

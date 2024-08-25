@@ -45,7 +45,8 @@ public class UserController {
         UserDTO user = mapper.mapToUserDTO(service.getById(id));
         return ResponseEntity.ok(user);
     }
-//    UPDATE
+
+    //    UPDATE
     @PatchMapping("me")
     @Operation(summary = "Обновление данных пользователя")
     public ResponseEntity<UserDTO> updateMe(@RequestBody UserDTO user) {
@@ -53,6 +54,7 @@ public class UserController {
         UserDTO updatedUser = mapper.mapToUserDTO(service.updateMe(user));
         return ResponseEntity.ok(updatedUser);
     }
+
     @PatchMapping
     @Operation(summary = "Обновление данных пользователя")
     public ResponseEntity<UserDTO> updateUser(@RequestBody UserDTO user) {

@@ -1,17 +1,17 @@
 package com.pavel_fomchenkov.tasktracker.service;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.pavel_fomchenkov.tasktracker.dto.TaskDTO;
 import com.pavel_fomchenkov.tasktracker.exception.TaskNotFoundException;
 import com.pavel_fomchenkov.tasktracker.mapper.TaskMapper;
-import com.pavel_fomchenkov.tasktracker.model.Status;
-import com.pavel_fomchenkov.tasktracker.model.Task;
+import com.pavel_fomchenkov.tasktracker.model.*;
 import com.pavel_fomchenkov.tasktracker.repository.TaskRepository;
+import jakarta.persistence.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -49,13 +49,6 @@ public class TaskServiceImpl implements TaskService {
         }
         task.setStatus(Status.ACTIVE);
         return repository.save(task);
-//        task.setAuthor( SecurityContextHolder.getContext().getAuthentication().getName());
-//        if (taskDTO.getStartDate() == null ||
-//                taskDTO.getStartDate().before(new Date())) {
-//            taskDTO.setStartDate(new Date());
-//        }
-//        taskDTO.setStatus(Status.ACTIVE);
-//        return repository.save(mapper.mapToTask(taskDTO));
     }
 
     /**
@@ -70,6 +63,7 @@ public class TaskServiceImpl implements TaskService {
 
     /**
      * Получение задачи по id
+     *
      * @param id идентификатор задачи
      * @return задача
      */
@@ -79,6 +73,30 @@ public class TaskServiceImpl implements TaskService {
     }
 
     /**
+     * Редактирование задачи
+     *
+     * @param task задача
+     * @return обновленная задача
+     */
+    @Override
+    public Task editTask(Task task) {
+        Task taskFromBD = this.getById(task.getId());
+        boolean isAdmin = isAdmin();
+        if (isAdmin || taskFromBD.getAuthor().getUsername().equals(getCurrentUserName())) {
+            if (isAdmin) taskFromBD.setAuthor(task.getAuthor());
+            taskFromBD.setStartDate(task.getStartDate());
+            taskFromBD.setFinishDate(task.getFinishDate());
+            taskFromBD.setDescription(task.getDescription());
+            taskFromBD.setStatus(task.getStatus());
+            taskFromBD.setPriority(task.getPriority());
+            return repository.save(taskFromBD);
+        } else throw new TaskNotFoundException("У пользователя нет прав на изменение задачи id " + task.getId());
+    }
+// TODO необходимо добавить методы добавления и удаления соисполнителей в задачу
+//    TODO нужно переделать методы, чтобы пользователю возвращались задачи в укороченном виде
+//     TODO + (без комментариев, с коротким списком соисполнителей)
+
+    /**
      * Удаление задачи по id
      * <p>
      */
@@ -86,4 +104,15 @@ public class TaskServiceImpl implements TaskService {
     public void deleteTask(Long id) {
         repository.deleteById(id);
     }
+
+
+    private String getCurrentUserName() {
+        return SecurityContextHolder.getContext().getAuthentication().getName();
+    }
+
+    private Boolean isAdmin() {
+        return SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream()
+                .anyMatch(r -> r.getAuthority().equals("ROLE_ADMIN"));
+    }
+
 }
