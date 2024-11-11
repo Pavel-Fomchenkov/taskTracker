@@ -22,6 +22,7 @@ public class TaskController {
     private final TaskMapper mapper;
 
     //        CREATE
+
     /**
      * Создание новой задачи
      *
@@ -48,7 +49,7 @@ public class TaskController {
     }
 
     /**
-     * Получение задачи с комментариями по id задачи
+     * Получение задачи по id
      *
      * @return задача
      */
@@ -61,14 +62,13 @@ public class TaskController {
     }
 
 
-//    UPDATE
-@PatchMapping
-@Operation(summary = "Редактирование задачи")
-public ResponseEntity<Task> editTask(@RequestBody Task task) {
-    task = service.editTask(task);
-    return ResponseEntity.ok(task);
-}
-
+    //    UPDATE
+    @PatchMapping
+    @Operation(summary = "Редактирование задачи")
+    public ResponseEntity<Task> editTask(@RequestBody Task task) {
+        task = service.editTask(task);
+        return ResponseEntity.ok(task);
+    }
 
 
 //    DELETE

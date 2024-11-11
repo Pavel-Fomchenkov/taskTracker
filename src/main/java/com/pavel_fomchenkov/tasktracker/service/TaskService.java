@@ -37,14 +37,6 @@ public interface TaskService {
     Task getById(Long id);
 
     /**
-     * Получение задачи со списком комментариев по id
-     *
-     * @param id идентификатор задачи
-     * @return задача
-     */
-    TaskDTOWithComments getTaskDTOWithCommentsById(Long id);
-
-    /**
      * Редактирование задачи
      *
      * @param task задача

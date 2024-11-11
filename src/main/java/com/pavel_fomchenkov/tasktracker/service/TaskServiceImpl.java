@@ -73,18 +73,6 @@ public class TaskServiceImpl implements TaskService {
     }
 
     /**
-     * Получение задачи с комментариями по id задачи
-     *
-     * @param id идентификатор задачи
-     * @return задача
-     */
-    @Override
-    @Transactional
-    public TaskDTOWithComments getTaskDTOWithCommentsById(Long id) {
-        return repository.findTaskDTOWithCommentsById(id).orElseThrow(() -> new TaskNotFoundException("Задача id: " + id + " не найдена"));
-    }
-
-    /**
      * Редактирование задачи
      *
      * @param task задача

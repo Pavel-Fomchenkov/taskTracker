@@ -8,6 +8,7 @@ import lombok.Data;
 
 import java.util.Date;
 import java.util.List;
+// TODO Implement or remove this class
 
 @Data
 public class TaskDTOWithComments {
@@ -23,7 +24,7 @@ public class TaskDTOWithComments {
     private List<CommentDTO> comments;
 
     public TaskDTOWithComments(Long id, String authorName, Date startDate, Date finishDate,
-                   String description, Status status, Priority priority, List<CommentDTO> comments) {
+                               String description, Status status, Priority priority, List<CommentDTO> comments) {
         this.id = id;
         this.authorName = authorName;
         this.startDate = startDate;
