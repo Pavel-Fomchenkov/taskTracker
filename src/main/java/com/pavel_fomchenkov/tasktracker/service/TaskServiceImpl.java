@@ -1,15 +1,15 @@
 package com.pavel_fomchenkov.tasktracker.service;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.pavel_fomchenkov.tasktracker.dto.TaskDTO;
+import com.pavel_fomchenkov.tasktracker.dto.TaskDTOWithComments;
 import com.pavel_fomchenkov.tasktracker.exception.TaskNotFoundException;
 import com.pavel_fomchenkov.tasktracker.mapper.TaskMapper;
 import com.pavel_fomchenkov.tasktracker.model.*;
 import com.pavel_fomchenkov.tasktracker.repository.TaskRepository;
-import jakarta.persistence.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -70,6 +70,18 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public Task getById(Long id) {
         return repository.findById(id).orElseThrow(() -> new TaskNotFoundException("Задача id: " + id + " не найдена"));
+    }
+
+    /**
+     * Получение задачи с комментариями по id задачи
+     *
+     * @param id идентификатор задачи
+     * @return задача
+     */
+    @Override
+    @Transactional
+    public TaskDTOWithComments getTaskDTOWithCommentsById(Long id) {
+        return repository.findTaskDTOWithCommentsById(id).orElseThrow(() -> new TaskNotFoundException("Задача id: " + id + " не найдена"));
     }
 
     /**

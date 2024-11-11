@@ -1,6 +1,7 @@
 package com.pavel_fomchenkov.tasktracker.controller;
 
 import com.pavel_fomchenkov.tasktracker.dto.TaskDTO;
+import com.pavel_fomchenkov.tasktracker.dto.TaskDTOWithComments;
 import com.pavel_fomchenkov.tasktracker.mapper.TaskMapper;
 import com.pavel_fomchenkov.tasktracker.model.Task;
 import com.pavel_fomchenkov.tasktracker.service.TaskService;
@@ -26,18 +27,8 @@ public class TaskController {
      *
      * @return задача
      */
-    @PostMapping("task")
-    public ResponseEntity<Task> createTask(@RequestBody Task task) {
-        Task newTask = service.create(task);
-        return ResponseEntity.ok(newTask);
-    }
-
-    /**
-     * Создание новой задачи
-     *
-     * @return задача
-     */
     @PostMapping()
+    @Operation(summary = "Создание новой задачи")
     public ResponseEntity<Task> createTask(@RequestBody TaskDTO taskDTO) {
         Task newTask = service.create(taskDTO);
         return ResponseEntity.ok(newTask);
@@ -57,14 +48,14 @@ public class TaskController {
     }
 
     /**
-     * Получение задачи по id
+     * Получение задачи с комментариями по id задачи
      *
      * @return задача
      */
     @GetMapping()
-    @Operation(summary = "Получение о задаче по id")
-    public ResponseEntity<Task> getById(@RequestParam Long id) {
-        Task task = service.getById(id);
+    @Operation(summary = "Получение задачи по id")
+    public ResponseEntity<TaskDTO> getById(@RequestParam Long id) {
+        TaskDTO task = mapper.mapToTaskDTO(service.getById(id));
 //        List<TaskDTO> tasks = service.getAll().stream().map(mapper::mapToTaskDTO).collect(Collectors.toList());
         return ResponseEntity.ok(task);
     }

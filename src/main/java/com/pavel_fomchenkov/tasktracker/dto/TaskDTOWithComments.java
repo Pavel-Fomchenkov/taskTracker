@@ -2,17 +2,15 @@ package com.pavel_fomchenkov.tasktracker.dto;
 
 import com.pavel_fomchenkov.tasktracker.model.Priority;
 import com.pavel_fomchenkov.tasktracker.model.Status;
-import jakarta.persistence.*;
-import jdk.jfr.Name;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
-public class TaskDTO {
-
+public class TaskDTOWithComments {
     private Long id;
     private String authorName;
     private Date startDate;
@@ -22,9 +20,10 @@ public class TaskDTO {
     private Status status;
     @Enumerated(EnumType.STRING)
     private Priority priority;
+    private List<CommentDTO> comments;
 
-    public TaskDTO(Long id, String authorName, Date startDate, Date finishDate,
-                   String description, Status status, Priority priority) {
+    public TaskDTOWithComments(Long id, String authorName, Date startDate, Date finishDate,
+                   String description, Status status, Priority priority, List<CommentDTO> comments) {
         this.id = id;
         this.authorName = authorName;
         this.startDate = startDate;
@@ -32,5 +31,6 @@ public class TaskDTO {
         this.description = description;
         this.status = status;
         this.priority = priority;
+        this.comments = comments;
     }
 }

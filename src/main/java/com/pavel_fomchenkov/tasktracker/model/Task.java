@@ -43,7 +43,6 @@ public class Task {
     @Column(name = "priority", nullable = false)
     private Priority priority;
 
-
     @JoinTable(name = "task_performers", joinColumns = @JoinColumn(name = "task_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
     @ManyToMany(fetch = FetchType.LAZY)
     @JsonProperty("performers")

@@ -60,6 +60,17 @@ public class CommentServiceImpl implements CommentService {
     }
 
     /**
+     * Получение комментариев по id задачи
+     *
+     * @param taskId идентификатор задачи
+     * @return список комментариев
+     */
+    @Override
+    public List<Comment> getByTaskId(Long taskId) {
+        return repository.findAllByTaskId(taskId);
+    }
+
+    /**
      * Редактирование комментария
      *
      * @param comment исправленный комментарий

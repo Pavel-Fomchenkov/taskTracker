@@ -1,6 +1,7 @@
 package com.pavel_fomchenkov.tasktracker.mapper;
 
 import com.pavel_fomchenkov.tasktracker.dto.TaskDTO;
+import com.pavel_fomchenkov.tasktracker.dto.TaskDTOWithComments;
 import com.pavel_fomchenkov.tasktracker.model.Task;
 import com.pavel_fomchenkov.tasktracker.model.User;
 import com.pavel_fomchenkov.tasktracker.service.UserService;
@@ -20,6 +21,10 @@ public abstract class TaskMapper {
     @Named("mapToTaskDTO")
     @Mapping(target = "authorName", source = "author", qualifiedByName = "userToUsername")
     public abstract TaskDTO mapToTaskDTO(Task task);
+
+    @Named("mapToTaskDTOWithComments")
+    @Mapping(target = "authorName", source = "author", qualifiedByName = "userToUsername")
+    public abstract TaskDTOWithComments mapToTaskDTOWithComments(Task task);
 
     @Named("mapToTask")
     @Mapping(target = "author", source = "authorName", qualifiedByName = "authorNameToUser")

@@ -1,6 +1,7 @@
 package com.pavel_fomchenkov.tasktracker.service;
 
 import com.pavel_fomchenkov.tasktracker.dto.TaskDTO;
+import com.pavel_fomchenkov.tasktracker.dto.TaskDTOWithComments;
 import com.pavel_fomchenkov.tasktracker.model.Task;
 
 import java.util.List;
@@ -34,6 +35,14 @@ public interface TaskService {
      * @return задача
      */
     Task getById(Long id);
+
+    /**
+     * Получение задачи со списком комментариев по id
+     *
+     * @param id идентификатор задачи
+     * @return задача
+     */
+    TaskDTOWithComments getTaskDTOWithCommentsById(Long id);
 
     /**
      * Редактирование задачи

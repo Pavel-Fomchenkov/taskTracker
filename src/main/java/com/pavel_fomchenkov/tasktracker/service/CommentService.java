@@ -30,13 +30,20 @@ public interface CommentService {
     Comment getById(Long id);
 
     /**
+     * Получение комментариев по id задачи
+     *
+     * @param taskId идентификатор задачи
+     * @return список комментариев
+     */
+    List<Comment> getByTaskId(Long taskId);
+
+    /**
      * Редактирование комментария
      *
      * @param comment исправленный комментарий
      * @return комментарий из базы данных
      */
     Comment edit(Comment comment);
-
     /**
      * Удаление комментария по его id
      *

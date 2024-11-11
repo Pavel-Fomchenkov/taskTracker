@@ -28,6 +28,7 @@ public class CommentController {
      * @return комментарий
      */
     @PostMapping()
+    @Operation(summary = "Создание нового комментария к задаче")
     public ResponseEntity<Comment> createComment(@RequestParam Long taskId, @RequestBody Comment comment) {
         Comment newComment = service.create(taskId, comment);
         return ResponseEntity.ok(newComment);
@@ -39,7 +40,6 @@ public class CommentController {
      *
      * @return комментарии
      */
-//    TODO исправить ошибку
     @GetMapping("all")
     @Operation(summary = "Получение информации о всех комментариях")
     public ResponseEntity<List<Comment>> getAll() {
@@ -60,6 +60,20 @@ public class CommentController {
         return ResponseEntity.ok(comment);
     }
 
+    /**
+     * Получение комментариев по id задачи
+     *
+     * @param taskId идентификатор задачи
+     * @return список комментариев
+     */
+//    TODO показывает модель автора коментария с паролем, переделать на DTO
+    @GetMapping("task")
+    @Operation(summary = "Получение комментариев по id задачи")
+    public ResponseEntity<List<Comment>> getByTaskId(Long taskId) {
+        List<Comment> comments = service.getByTaskId(taskId);
+        return ResponseEntity.ok(comments);
+    }
+
 //    UPDATE
 
     /**
@@ -69,6 +83,7 @@ public class CommentController {
      * @return комментарий из базы данных
      */
     @PatchMapping()
+    @Operation(summary = "Редактирование комментария")
     public ResponseEntity<Comment> edit(@RequestBody Comment comment) {
         Comment updatedComment = service.edit(comment);
         return ResponseEntity.ok(updatedComment);
