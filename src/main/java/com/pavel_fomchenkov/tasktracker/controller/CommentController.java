@@ -1,5 +1,6 @@
 package com.pavel_fomchenkov.tasktracker.controller;
 
+import com.pavel_fomchenkov.tasktracker.dto.CommentDTO;
 import com.pavel_fomchenkov.tasktracker.mapper.CommentMapper;
 import com.pavel_fomchenkov.tasktracker.model.Comment;
 import com.pavel_fomchenkov.tasktracker.service.CommentService;
@@ -10,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/comment")
@@ -66,12 +68,11 @@ public class CommentController {
      * @param taskId идентификатор задачи
      * @return список комментариев
      */
-//    TODO показывает модель автора коментария с паролем, переделать на DTO
     @GetMapping("task")
     @Operation(summary = "Получение комментариев по id задачи")
-    public ResponseEntity<List<Comment>> getByTaskId(Long taskId) {
+    public ResponseEntity<List<CommentDTO>> getByTaskId(Long taskId) {
         List<Comment> comments = service.getByTaskId(taskId);
-        return ResponseEntity.ok(comments);
+        return ResponseEntity.ok(comments.stream().map(mapper::mapToCommentDTO).collect(Collectors.toList()));
     }
 
 //    UPDATE
