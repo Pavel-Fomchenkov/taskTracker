@@ -23,7 +23,7 @@ public class UserController {
     private final UserMapper mapper;
     private final PasswordEncoder encoder;
 
-    //    CREATE - AuthController
+//    CREATE - AuthController
 //    READ
     @GetMapping("all")
     @Operation(summary = "Получение информации о всех пользователях")
@@ -39,7 +39,7 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
-    @GetMapping("select")
+    @GetMapping()
     @Operation(summary = "Получение информации о пользователе по его id")
     public ResponseEntity<UserDTO> getById(@RequestParam Long id) {
         UserDTO user = mapper.mapToUserDTO(service.getById(id));

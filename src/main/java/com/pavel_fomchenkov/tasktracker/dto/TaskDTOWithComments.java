@@ -2,6 +2,7 @@ package com.pavel_fomchenkov.tasktracker.dto;
 
 import com.pavel_fomchenkov.tasktracker.model.Priority;
 import com.pavel_fomchenkov.tasktracker.model.Status;
+import com.pavel_fomchenkov.tasktracker.model.User;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.Data;
@@ -21,6 +22,7 @@ public class TaskDTOWithComments {
     private Status status;
     @Enumerated(EnumType.STRING)
     private Priority priority;
+    private List<User> performers;
     private List<CommentDTO> comments;
 
     public TaskDTOWithComments(Long id, String authorName, Date startDate, Date finishDate,

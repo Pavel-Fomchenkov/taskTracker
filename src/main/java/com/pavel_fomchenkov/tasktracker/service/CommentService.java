@@ -1,5 +1,6 @@
 package com.pavel_fomchenkov.tasktracker.service;
 
+import com.pavel_fomchenkov.tasktracker.dto.CommentDTO;
 import com.pavel_fomchenkov.tasktracker.model.Comment;
 
 import java.util.List;
@@ -9,10 +10,10 @@ public interface CommentService {
      * Создание нового комментария к задаче
      *
      * @param taskId  идентификатор задачи
-     * @param comment комментарий
+     * @param commentDTO комментарий
      * @return комментарий
      */
-    Comment create(Long taskId, Comment comment);
+    Comment create(Long taskId, CommentDTO commentDTO);
 
     /**
      * Получение списка всех комментариев
@@ -40,10 +41,10 @@ public interface CommentService {
     /**
      * Редактирование комментария
      *
-     * @param comment исправленный комментарий
+     * @param commentDTO исправленный комментарий
      * @return комментарий из базы данных
      */
-    Comment edit(Comment comment);
+    Comment edit(CommentDTO commentDTO);
     /**
      * Удаление комментария по его id
      *

@@ -1,5 +1,6 @@
 package com.pavel_fomchenkov.tasktracker.service;
 
+import com.pavel_fomchenkov.tasktracker.dto.CommentDTO;
 import com.pavel_fomchenkov.tasktracker.exception.CommentNotFoundException;
 import com.pavel_fomchenkov.tasktracker.exception.TaskNotFoundException;
 import com.pavel_fomchenkov.tasktracker.model.Comment;
@@ -24,15 +25,18 @@ public class CommentServiceImpl implements CommentService {
     /**
      * Создание нового комментария к задаче
      *
-     * @param taskId  идентификатор задачи
-     * @param comment комментарий
+     * @param taskId     идентификатор задачи
+     * @param commentDTO комментарий
      * @return комментарий
      */
     @Override
-    public Comment create(Long taskId, Comment comment) {
+    public Comment create(Long taskId, CommentDTO commentDTO) {
+        User currentUser = userService.getCurrentUser();
+        Comment comment = new Comment();
         comment.setTask(taskRepository.findById(taskId).orElseThrow(() ->
                 new TaskNotFoundException("Задача id: " + taskId + " не найдена")));
-        comment.setAuthor(userService.getCurrentUser());
+        comment.setAuthor(currentUser);
+        comment.setText(commentDTO.getText());
         comment.setDate(new Date());
         return repository.save(comment);
     }
@@ -73,17 +77,15 @@ public class CommentServiceImpl implements CommentService {
     /**
      * Редактирование комментария
      *
-     * @param comment исправленный комментарий
+     * @param commentDTO исправленный комментарий
      * @return комментарий из базы данных
      */
     @Override
-    public Comment edit(Comment comment) {
-        User currentUser = userService.getCurrentUser();
-        if (!currentUser.equals(comment.getAuthor()) && !currentUser.getRole().equals(Role.ROLE_ADMIN)) {
-            throw new AccessDeniedException("Доступ запрещен");
-        }
-        Comment commentFromDb = this.getById(comment.getId());
-        commentFromDb.setText(comment.getText());
+    public Comment edit(CommentDTO commentDTO) {
+        User author = userService.getById(this.getById(commentDTO.getId()).getAuthor().getId());
+        this.validateAuthor(author);
+        Comment commentFromDb = this.getById(commentDTO.getId());
+        commentFromDb.setText(commentDTO.getText());
         commentFromDb.setDate(new Date());
         return repository.save(commentFromDb);
     }
@@ -97,4 +99,13 @@ public class CommentServiceImpl implements CommentService {
     public void deleteComment(Long id) {
         repository.deleteById(id);
     }
+
+    private boolean validateAuthor(User author) {
+        User currentUser = userService.getCurrentUser();
+        if (!currentUser.equals(author) && !currentUser.getRole().equals(Role.ROLE_ADMIN)) {
+            throw new AccessDeniedException("Доступ запрещен");
+        }
+        return true;
+    }
+
 }

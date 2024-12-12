@@ -1,9 +1,14 @@
 package com.pavel_fomchenkov.tasktracker.mapper;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.pavel_fomchenkov.tasktracker.dto.CommentDTO;
 import com.pavel_fomchenkov.tasktracker.model.Comment;
+import com.pavel_fomchenkov.tasktracker.model.Task;
 import com.pavel_fomchenkov.tasktracker.model.User;
 import jakarta.persistence.Column;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;

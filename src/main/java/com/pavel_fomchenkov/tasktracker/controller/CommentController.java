@@ -26,13 +26,13 @@ public class CommentController {
      * Создание нового комментария к задаче
      *
      * @param taskId  идентификатор задачи
-     * @param comment комментарий
+     * @param commentDTO комментарий
      * @return комментарий
      */
     @PostMapping()
     @Operation(summary = "Создание нового комментария к задаче")
-    public ResponseEntity<Comment> createComment(@RequestParam Long taskId, @RequestBody Comment comment) {
-        Comment newComment = service.create(taskId, comment);
+    public ResponseEntity<CommentDTO> createComment(@RequestParam Long taskId, @RequestBody CommentDTO commentDTO) {
+        CommentDTO newComment = mapper.mapToCommentDTO(service.create(taskId, commentDTO));
         return ResponseEntity.ok(newComment);
     }
 //    READ
@@ -44,8 +44,8 @@ public class CommentController {
      */
     @GetMapping("all")
     @Operation(summary = "Получение информации о всех комментариях")
-    public ResponseEntity<List<Comment>> getAll() {
-        List<Comment> comments = service.getAll();
+    public ResponseEntity<List<CommentDTO>> getAll() {
+        List<CommentDTO> comments = service.getAll().stream().map(mapper::mapToCommentDTO).toList();
         return ResponseEntity.ok(comments);
     }
 
@@ -57,8 +57,8 @@ public class CommentController {
      */
     @GetMapping()
     @Operation(summary = "Получение комментария по id")
-    public ResponseEntity<Comment> getById(Long id) {
-        Comment comment = service.getById(id);
+    public ResponseEntity<CommentDTO> getById(Long id) {
+        CommentDTO comment = mapper.mapToCommentDTO(service.getById(id));
         return ResponseEntity.ok(comment);
     }
 
@@ -80,13 +80,13 @@ public class CommentController {
     /**
      * Редактирование комментария
      *
-     * @param comment исправленный комментарий
+     * @param commentDTO исправленный комментарий
      * @return комментарий из базы данных
      */
     @PatchMapping()
     @Operation(summary = "Редактирование комментария")
-    public ResponseEntity<Comment> edit(@RequestBody Comment comment) {
-        Comment updatedComment = service.edit(comment);
+    public ResponseEntity<CommentDTO> edit(@RequestBody CommentDTO commentDTO) {
+        CommentDTO updatedComment = mapper.mapToCommentDTO(service.edit(commentDTO));
         return ResponseEntity.ok(updatedComment);
     }
 

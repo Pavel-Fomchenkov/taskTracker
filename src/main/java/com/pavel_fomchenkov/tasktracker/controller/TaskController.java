@@ -21,7 +21,7 @@ public class TaskController {
     private final TaskService service;
     private final TaskMapper mapper;
 
-    //        CREATE
+//        CREATE
 
     /**
      * Создание новой задачи
@@ -61,14 +61,21 @@ public class TaskController {
         return ResponseEntity.ok(task);
     }
 
-
-    //    UPDATE
+//    UPDATE
     @PatchMapping
     @Operation(summary = "Редактирование задачи")
     public ResponseEntity<Task> editTask(@RequestBody Task task) {
         task = service.editTask(task);
         return ResponseEntity.ok(task);
     }
+// TODO сделать добавление и удаление соисполнителей, при добавлении и удалении исполнителей создавать комментарий
+//    "Иван Иванов добавил/удалил исполнителя Петра Петрова
+/*    @PatchMapping
+    @Operation(summary = "Добавление исполнителя к задаче")
+    public ResponseEntity<Task> addPerformerToTask(@RequestBody Task task) {
+        task = service.addPerformer(task);
+        return ResponseEntity.ok(task);
+    }*/
 
 
 //    DELETE
