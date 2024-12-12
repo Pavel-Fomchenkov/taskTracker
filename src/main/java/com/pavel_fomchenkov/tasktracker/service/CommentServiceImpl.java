@@ -77,10 +77,9 @@ public class CommentServiceImpl implements CommentService {
      * @return комментарий из базы данных
      */
     @Override
-//    TODO нужно сделать авторизацию пользователя перед изменением коммента
     public Comment edit(Comment comment) {
         User currentUser = userService.getCurrentUser();
-        if (!currentUser.equals(comment.getAuthor()) || !currentUser.getRole().equals(Role.ROLE_ADMIN)) {
+        if (!currentUser.equals(comment.getAuthor()) && !currentUser.getRole().equals(Role.ROLE_ADMIN)) {
             throw new AccessDeniedException("Доступ запрещен");
         }
         Comment commentFromDb = this.getById(comment.getId());
