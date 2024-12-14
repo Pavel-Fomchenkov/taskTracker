@@ -57,6 +57,7 @@ public interface UserService {
      * @return текущий пользователь
      */
     User getCurrentUser();
+
     /**
      * Изменение данных текущего пользователя
      *
@@ -94,4 +95,20 @@ public interface UserService {
     void getAdmin();
 
     boolean isUserAdmin();
+
+    /**
+     * Проверка наличия пользователя в базе по id
+     *
+     * @param id id пользователя
+     * @return true если пользователь существует
+     */
+    boolean exists(Long id);
+
+    /**
+     * Проверка прав доступа к контенту
+     *
+     * @param author автор редактируемого контента
+     * @return true если пользователь является автором или админом
+     */
+    boolean validateAuthor(User author);
 }

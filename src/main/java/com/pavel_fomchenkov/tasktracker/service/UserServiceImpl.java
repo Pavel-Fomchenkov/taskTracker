@@ -6,6 +6,7 @@ import com.pavel_fomchenkov.tasktracker.model.Role;
 import com.pavel_fomchenkov.tasktracker.model.User;
 import com.pavel_fomchenkov.tasktracker.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -190,4 +191,29 @@ public class UserServiceImpl implements UserService {
                 .getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"));
     }
 
+    /**
+     * Проверка наличия пользователя в базе по id
+     *
+     * @param id id пользователя
+     * @return true если пользователь существует
+     */
+    @Override
+    public boolean exists(Long id) {
+        return repository.existsById(id);
+    }
+
+    /**
+     * Проверка прав доступа к контенту
+     *
+     * @param author автор редактируемого контента
+     * @return true если пользователь является автором или админом
+     */
+    @Override
+    public boolean validateAuthor(User author) {
+        User currentUser = getCurrentUser();
+        if (!currentUser.equals(author) && !currentUser.getRole().equals(Role.ROLE_ADMIN)) {
+            throw new AccessDeniedException("Доступ запрещен");
+        }
+        return true;
+    }
 }

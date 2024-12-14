@@ -50,4 +50,13 @@ public interface TaskService {
      * @param id идентификатор задачи
      */
     void deleteTask(Long id);
+
+    /**
+     * Добавление соисполнителя к задаче
+     *
+     * @param userId id соисполнителя
+     * @param task   задача
+     * @return задача
+     */
+    Task addPerformer(Long userId, Task task);
 }

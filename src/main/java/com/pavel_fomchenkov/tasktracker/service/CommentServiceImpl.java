@@ -9,6 +9,7 @@ import com.pavel_fomchenkov.tasktracker.model.User;
 import com.pavel_fomchenkov.tasktracker.repository.CommentRepository;
 import com.pavel_fomchenkov.tasktracker.repository.TaskRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.converter.json.GsonBuilderUtils;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
@@ -80,14 +81,17 @@ public class CommentServiceImpl implements CommentService {
      * @param commentDTO исправленный комментарий
      * @return комментарий из базы данных
      */
+//    TODO сделать выбрасывание исключения если нет доступа
     @Override
     public Comment edit(CommentDTO commentDTO) {
         User author = userService.getById(this.getById(commentDTO.getId()).getAuthor().getId());
-        this.validateAuthor(author);
-        Comment commentFromDb = this.getById(commentDTO.getId());
-        commentFromDb.setText(commentDTO.getText());
-        commentFromDb.setDate(new Date());
-        return repository.save(commentFromDb);
+        if (userService.validateAuthor(author)) {
+            Comment commentFromDb = this.getById(commentDTO.getId());
+            commentFromDb.setText(commentDTO.getText());
+            commentFromDb.setDate(new Date());
+            return repository.save(commentFromDb);
+        }
+        return null;
     }
 
     /**
@@ -98,14 +102,6 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public void deleteComment(Long id) {
         repository.deleteById(id);
-    }
-
-    private boolean validateAuthor(User author) {
-        User currentUser = userService.getCurrentUser();
-        if (!currentUser.equals(author) && !currentUser.getRole().equals(Role.ROLE_ADMIN)) {
-            throw new AccessDeniedException("Доступ запрещен");
-        }
-        return true;
     }
 
 }

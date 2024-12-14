@@ -97,6 +97,26 @@ public class TaskServiceImpl implements TaskService {
 //     TODO + (без комментариев, с коротким списком соисполнителей)
 
     /**
+     * Добавление соисполнителя к задаче
+     *
+     * @param userId id соисполнителя
+     * @param task   задача
+     * @return задача
+     */
+    @Override
+    public Task addPerformer(Long userId, Task task) {
+        Task taskFromBD = this.getById(task.getId());
+        User userFromBD = userService.getById(userId);
+        if (userFromBD != null && userService.validateAuthor(taskFromBD.getAuthor())) {
+            Collection<User> performers = taskFromBD.getPerformers();
+            performers.add(userFromBD);
+            taskFromBD.setPerformers(performers);
+            repository.save(taskFromBD);
+        }
+        return null;
+    }
+
+    /**
      * Удаление задачи по id
      * <p>
      */

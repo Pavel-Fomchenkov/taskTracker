@@ -57,11 +57,16 @@ public class TaskController {
     @Operation(summary = "Получение задачи по id")
     public ResponseEntity<TaskDTO> getById(@RequestParam Long id) {
         TaskDTO task = mapper.mapToTaskDTO(service.getById(id));
-//        List<TaskDTO> tasks = service.getAll().stream().map(mapper::mapToTaskDTO).collect(Collectors.toList());
         return ResponseEntity.ok(task);
     }
 
 //    UPDATE
+
+    /**
+     * Редактирование задачи
+     *
+     * @return задача
+     */
     @PatchMapping
     @Operation(summary = "Редактирование задачи")
     public ResponseEntity<Task> editTask(@RequestBody Task task) {
@@ -70,13 +75,21 @@ public class TaskController {
     }
 // TODO сделать добавление и удаление соисполнителей, при добавлении и удалении исполнителей создавать комментарий
 //    "Иван Иванов добавил/удалил исполнителя Петра Петрова
-/*    @PatchMapping
-    @Operation(summary = "Добавление исполнителя к задаче")
-    public ResponseEntity<Task> addPerformerToTask(@RequestBody Task task) {
-        task = service.addPerformer(task);
-        return ResponseEntity.ok(task);
-    }*/
+//    Сделать чтобы работа велась через DTO, а не полную модель
 
+    /**
+     * Добавление соисполнителя к задаче
+     *
+     * @param userId id соисполнителя
+     * @param task   задача
+     * @return задача
+     */
+    @PatchMapping("addPerformer")
+    @Operation(summary = "Добавление исполнителя к задаче")
+    public ResponseEntity<Task> addPerformerToTask(@RequestParam Long userId, @RequestBody Task task) {
+        task = service.addPerformer(userId, task);
+        return ResponseEntity.ok(task);
+    }
 
 //    DELETE
 
