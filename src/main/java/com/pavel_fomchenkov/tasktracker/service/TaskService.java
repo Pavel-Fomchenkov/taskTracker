@@ -59,4 +59,13 @@ public interface TaskService {
      * @return задача
      */
     Task addPerformer(Long userId, Task task);
+
+    /**
+     * Удаление соисполнителя из задачи
+     *
+     * @param userId id соисполнителя
+     * @param task   задача
+     * @return задача
+     */
+    Task removePerformer(Long userId, Task task);
 }

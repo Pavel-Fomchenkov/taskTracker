@@ -91,6 +91,20 @@ public class TaskController {
         return ResponseEntity.ok(task);
     }
 
+    /**
+     * Удаление соисполнителя из задачи
+     *
+     * @param userId id соисполнителя
+     * @param task   задача
+     * @return задача
+     */
+    @PatchMapping("removePerformer")
+    @Operation(summary = "Удаление соисполнителя из задачи")
+    public ResponseEntity<Task> removePerformerFromTask(@RequestParam Long userId, @RequestBody Task task) {
+        task = service.removePerformer(userId, task);
+        return ResponseEntity.ok(task);
+    }
+
 //    DELETE
 
     /**

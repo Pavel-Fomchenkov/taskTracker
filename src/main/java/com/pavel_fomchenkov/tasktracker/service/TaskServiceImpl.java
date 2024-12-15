@@ -92,9 +92,11 @@ public class TaskServiceImpl implements TaskService {
             return repository.save(taskFromBD);
         } else throw new TaskNotFoundException("У пользователя нет прав на изменение задачи id " + task.getId());
     }
-// TODO необходимо добавить методы добавления и удаления соисполнителей в задачу
+
 //    TODO нужно переделать методы, чтобы пользователю возвращались задачи в укороченном виде
 //     TODO + (без комментариев, с коротким списком соисполнителей)
+
+// TODO сделать метод для просмотра соисполнителей задачи
 
     /**
      * Добавление соисполнителя к задаче
@@ -109,9 +111,22 @@ public class TaskServiceImpl implements TaskService {
         User userFromBD = userService.getById(userId);
         if (userFromBD != null && userService.validateAuthor(taskFromBD.getAuthor())) {
             Collection<User> performers = taskFromBD.getPerformers();
-            performers.add(userFromBD);
-            taskFromBD.setPerformers(performers);
-            repository.save(taskFromBD);
+            if (!performers.contains(userFromBD)) {
+                performers.add(userFromBD);
+                return repository.save(taskFromBD);
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public Task removePerformer(Long userId, Task task) {
+        Task taskFromBD = this.getById(task.getId());
+        User userFromBD = userService.getById(userId);
+        if (userFromBD != null && userService.validateAuthor(taskFromBD.getAuthor())) {
+            Collection<User> performers = taskFromBD.getPerformers();
+                performers.remove(userFromBD);
+                return repository.save(taskFromBD);
         }
         return null;
     }
