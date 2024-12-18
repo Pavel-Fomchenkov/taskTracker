@@ -68,8 +68,13 @@ public class TaskServiceImpl implements TaskService {
      * @return задача
      */
     @Override
+    @Transactional
     public Task getById(Long id) {
-        return repository.findById(id).orElseThrow(() -> new TaskNotFoundException("Задача id: " + id + " не найдена"));
+        Task task = repository.findById(id).orElseThrow(() -> new TaskNotFoundException("Задача id: " + id + " не найдена"));
+//      next lines will invoke lazy loading
+        task.getComments().size();
+        task.getPerformers().size();
+        return task;
     }
 
     /**
@@ -119,14 +124,21 @@ public class TaskServiceImpl implements TaskService {
         return null;
     }
 
+    /**
+     * Удаление соисполнителя из задачи
+     *
+     * @param userId id соисполнителя
+     * @param task   задача
+     * @return задача
+     */
     @Override
     public Task removePerformer(Long userId, Task task) {
         Task taskFromBD = this.getById(task.getId());
         User userFromBD = userService.getById(userId);
         if (userFromBD != null && userService.validateAuthor(taskFromBD.getAuthor())) {
             Collection<User> performers = taskFromBD.getPerformers();
-                performers.remove(userFromBD);
-                return repository.save(taskFromBD);
+            performers.remove(userFromBD);
+            return repository.save(taskFromBD);
         }
         return null;
     }

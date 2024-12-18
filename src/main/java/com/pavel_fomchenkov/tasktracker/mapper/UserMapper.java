@@ -10,14 +10,4 @@ import org.mapstruct.Named;
 public interface UserMapper {
     @Named("mapToUserDTO")
     UserDTO mapToUserDTO(User user);
-
-//    @Mapping(target = "authorities", source = "role", qualifiedByName = "roleToAuthorities")
-//    UserDetailsDTO mapToUserDetailsDTO(User user);
-//
-//    @Named("roleToAuthorities")
-//    default Collection<? extends GrantedAuthority> roleToAuthorities(Role role) {
-//        return Arrays.stream(role.name().split(", "))
-//                .map(SimpleGrantedAuthority::new)
-//                .collect(Collectors.toList());
-//    }
 }

@@ -13,7 +13,7 @@ import java.util.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonIgnoreProperties(ignoreUnknown = true, value = {"performers"})
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Table(name = "tasks")
 public class Task {
     @Id
@@ -49,5 +49,6 @@ public class Task {
     private Collection<User> performers = new HashSet<>();
 
     @OneToMany(mappedBy = "task", fetch = FetchType.LAZY)
+    @JsonProperty("comments")
     private Collection<Comment> comments = new ArrayList<>();
 }

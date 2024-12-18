@@ -55,11 +55,12 @@ public class TaskController {
      */
     @GetMapping()
     @Operation(summary = "Получение задачи по id")
-    public ResponseEntity<TaskDTO> getById(@RequestParam Long id) {
-        TaskDTO task = mapper.mapToTaskDTO(service.getById(id));
-        return ResponseEntity.ok(task);
+    public ResponseEntity<TaskDTOWithComments> getById(@RequestParam Long id) {
+        Task task = service.getById(id);
+        TaskDTOWithComments taskDTOWithComments = mapper.mapToTaskDTOWithComments(task);
+        return ResponseEntity.ok(taskDTOWithComments);
     }
-
+//    TODO сделать скрытие данных о пароле и email в выводимых данных
 //    UPDATE
 
     /**
@@ -73,9 +74,6 @@ public class TaskController {
         task = service.editTask(task);
         return ResponseEntity.ok(task);
     }
-// TODO сделать добавление и удаление соисполнителей, при добавлении и удалении исполнителей создавать комментарий
-//    "Иван Иванов добавил/удалил исполнителя Петра Петрова
-//    Сделать чтобы работа велась через DTO, а не полную модель
 
     /**
      * Добавление соисполнителя к задаче
