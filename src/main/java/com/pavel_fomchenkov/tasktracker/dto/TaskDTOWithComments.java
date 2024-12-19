@@ -21,11 +21,11 @@ public class TaskDTOWithComments {
     private Status status;
     @Enumerated(EnumType.STRING)
     private Priority priority;
-    private Collection<UserDTO> performers;
+    private Collection<UserDTOMin> performers;
     private Collection<CommentDTO> comments;
 
     public TaskDTOWithComments(Long id, String authorName, Date startDate, Date finishDate, String description, Status status,
-                               Priority priority, Collection<UserDTO> performers, Collection<CommentDTO> comments) {
+                               Priority priority, Collection<UserDTOMin> performers, Collection<CommentDTO> comments) {
         this.id = id;
         this.authorName = authorName;
         this.startDate = startDate;

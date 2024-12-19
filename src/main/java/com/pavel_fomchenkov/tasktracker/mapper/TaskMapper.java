@@ -1,9 +1,6 @@
 package com.pavel_fomchenkov.tasktracker.mapper;
 
-import com.pavel_fomchenkov.tasktracker.dto.CommentDTO;
-import com.pavel_fomchenkov.tasktracker.dto.TaskDTO;
-import com.pavel_fomchenkov.tasktracker.dto.TaskDTOWithComments;
-import com.pavel_fomchenkov.tasktracker.dto.UserDTO;
+import com.pavel_fomchenkov.tasktracker.dto.*;
 import com.pavel_fomchenkov.tasktracker.model.Comment;
 import com.pavel_fomchenkov.tasktracker.model.Task;
 import com.pavel_fomchenkov.tasktracker.model.User;
@@ -53,8 +50,8 @@ public abstract class TaskMapper {
     }
 
     @Named("mapPerformers")
-    Collection<UserDTO> mapPerformers(Collection<User> performers) {
-        return performers.stream().map(p -> userMapper.mapToUserDTO(p)).collect(Collectors.toSet());
+    Collection<UserDTOMin> mapPerformers(Collection<User> performers) {
+        return performers.stream().map(p -> userMapper.mapToUserDTOMin(p)).collect(Collectors.toSet());
     }
 
     @Named("mapComments")

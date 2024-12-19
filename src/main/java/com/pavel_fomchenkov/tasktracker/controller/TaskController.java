@@ -60,7 +60,11 @@ public class TaskController {
         TaskDTOWithComments taskDTOWithComments = mapper.mapToTaskDTOWithComments(task);
         return ResponseEntity.ok(taskDTOWithComments);
     }
-//    TODO сделать скрытие данных о пароле и email в выводимых данных
+//    TODO сделать получение задач по id автора
+//    TODO сделать получение задач по id исполнителя
+//    TODO сделать получение задач по статусу
+//    TODO сделать получение задач по статусу и id автора
+//    TODO сделать получение задач по статусу и id исполнителя
 //    UPDATE
 
     /**
