@@ -2,9 +2,11 @@ package com.pavel_fomchenkov.tasktracker.service;
 
 import com.pavel_fomchenkov.tasktracker.dto.TaskDTO;
 import com.pavel_fomchenkov.tasktracker.dto.TaskDTOWithComments;
+import com.pavel_fomchenkov.tasktracker.model.Status;
 import com.pavel_fomchenkov.tasktracker.model.Task;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface TaskService {
     /**
@@ -68,4 +70,21 @@ public interface TaskService {
      * @return задача
      */
     Task removePerformer(Long userId, Task task);
+
+    /**
+     * Получение списка задач по id автора и опционально статусу
+     *
+     * @param authorId id автора
+     * @param status   статус задачи (опционально)
+     * @return задача
+     */
+    List<Task> getByAuthorIdAndStatus(Long authorId, Status status);
+
+    /**
+     * Получение списка задач по id автора и опционально статусу
+     *
+     * @param authorId id автора
+     * @return задача
+     */
+    List<Task> getByAuthorId(Long authorId);
 }

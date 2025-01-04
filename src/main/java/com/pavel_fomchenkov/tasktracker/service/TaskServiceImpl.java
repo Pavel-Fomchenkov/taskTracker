@@ -144,6 +144,36 @@ public class TaskServiceImpl implements TaskService {
     }
 
     /**
+     * Получение списка задач по id автора и опционально статусу
+     *
+     * @param authorId id автора
+     * @param status   статус задачи (опционально)
+     * @return задача
+     */
+    @Override
+    public List<Task> getByAuthorIdAndStatus(Long authorId, Status status) {
+        List<Task> tasks = repository.findByAuthorIdAndStatus(authorId, status);
+        return tasks;
+    }
+
+    /**
+     * Получение списка задач по id автора и опционально статусу
+     *
+     * @param authorId id автора
+     * @return задача
+     */
+    @Override
+    public List<Task> getByAuthorId(Long authorId) {
+        List<Task> tasks = repository.findByAuthorId(authorId);
+        for(Task task : tasks) {
+            task.getComments().size();
+            task.getPerformers().size();
+        }
+        return tasks;
+    }
+
+
+    /**
      * Удаление задачи по id
      * <p>
      */

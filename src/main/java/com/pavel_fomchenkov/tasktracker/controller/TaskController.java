@@ -3,15 +3,19 @@ package com.pavel_fomchenkov.tasktracker.controller;
 import com.pavel_fomchenkov.tasktracker.dto.TaskDTO;
 import com.pavel_fomchenkov.tasktracker.dto.TaskDTOWithComments;
 import com.pavel_fomchenkov.tasktracker.mapper.TaskMapper;
+import com.pavel_fomchenkov.tasktracker.model.Status;
 import com.pavel_fomchenkov.tasktracker.model.Task;
 import com.pavel_fomchenkov.tasktracker.service.TaskService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.annotation.Nullable;
+import jakarta.persistence.Enumerated;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/task")
@@ -51,6 +55,7 @@ public class TaskController {
     /**
      * Получение задачи по id
      *
+     * @param id id
      * @return задача
      */
     @GetMapping()
@@ -60,6 +65,25 @@ public class TaskController {
         TaskDTOWithComments taskDTOWithComments = mapper.mapToTaskDTOWithComments(task);
         return ResponseEntity.ok(taskDTOWithComments);
     }
+
+    /**
+     * Получение списка задач по id автора и опционально статусу
+     *
+     * @param authorId id автора
+     * @param status   статус задачи (опционально)
+     * @return задача
+     */
+    @GetMapping("author")
+    @Operation(summary = "Получение списка задач по id автора и опционально статусу")
+    public ResponseEntity<List<TaskDTOWithComments>> getByAuthorId(@RequestParam Long authorId, @Nullable Status status) {
+        List<Task> tasks;
+        if (status == null) {
+            tasks = service.getByAuthorId(authorId);
+        } else tasks = service.getByAuthorIdAndStatus(authorId, status);
+        List<TaskDTOWithComments> tasksDTOWithComments = tasks.stream().map(mapper::mapToTaskDTOWithComments).toList();
+        return ResponseEntity.ok(tasksDTOWithComments);
+    }
+
 //    TODO сделать получение задач по id автора
 //    TODO сделать получение задач по id исполнителя
 //    TODO сделать получение задач по статусу
