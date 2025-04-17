@@ -84,11 +84,23 @@ public class TaskController {
         return ResponseEntity.ok(tasksDTOWithComments);
     }
 
-//    TODO сделать получение задач по id автора
+    @GetMapping("performer")
+    @Operation(summary = "Получение списка задач по id исполнителя и опционально статусу")
+    public ResponseEntity<List<TaskDTOWithComments>> getByPerformerId(@RequestParam Long performerId, @Nullable Status status) {
+        List<Task> tasks;
+        if (status == null) {
+            tasks = service.getByPerformerId(performerId);
+        } else tasks = service.getByPerformerIdAndStatus(performerId, status);
+        List<TaskDTOWithComments> tasksDTOWithComments = tasks.stream().map(mapper::mapToTaskDTOWithComments).toList();
+        return ResponseEntity.ok(tasksDTOWithComments);
+    }
+
 //    TODO сделать получение задач по id исполнителя
 //    TODO сделать получение задач по статусу
-//    TODO сделать получение задач по статусу и id автора
 //    TODO сделать получение задач по статусу и id исполнителя
+//    TODO убедиться что методы получения задач со статусом корректно возвращают исполнителей и комменты
+//    TODO из репозитория нужно убрать запросы в базу с указанием конкретного репозитория
+//    TODO нужно запретить любому пользователю удалять любые задачи, а не только свои. Любые задачи может удалять только ADMIN
 //    UPDATE
 
     /**

@@ -72,19 +72,36 @@ public interface TaskService {
     Task removePerformer(Long userId, Task task);
 
     /**
-     * Получение списка задач по id автора и опционально статусу
+     * Получение списка задач по id автора и статусу
      *
      * @param authorId id автора
-     * @param status   статус задачи (опционально)
+     * @param status   статус задачи
      * @return задача
      */
     List<Task> getByAuthorIdAndStatus(Long authorId, Status status);
 
     /**
-     * Получение списка задач по id автора и опционально статусу
+     * Получение списка задач по id автора
      *
      * @param authorId id автора
      * @return задача
      */
     List<Task> getByAuthorId(Long authorId);
+
+    /**
+     * Получение списка задач по id исполнителя
+     *
+     * @param performerId id исполнителя
+     * @return задача
+     */
+    List<Task> getByPerformerId(Long performerId);
+
+    /**
+     * Получение списка задач по id исполнителя и статусу
+     *
+     * @param performerId id исполнителя
+     * @param status      статус задачи
+     * @return задача
+     */
+    List<Task> getByPerformerIdAndStatus(Long performerId, Status status);
 }
