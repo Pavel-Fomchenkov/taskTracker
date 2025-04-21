@@ -26,9 +26,11 @@ public interface TaskService {
     /**
      * Получение списка всех задач
      *
+     * @param page номер страницы (offset)
+     * @param size лимит выдачи
      * @return задачи
      */
-    List<TaskDTO> getAllDTO();
+    List<TaskDTO> getAllDTO(int page, int size);
 
     /**
      * Получение задачи по id

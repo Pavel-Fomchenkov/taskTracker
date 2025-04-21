@@ -10,6 +10,8 @@ import com.pavel_fomchenkov.tasktracker.service.TaskService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Nullable;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,13 +45,14 @@ public class TaskController {
 
     /**
      * Получение списка всех задач
-     *
+     * @param page номер страницы (offset)
+     * @param size лимит выдачи
      * @return задачи
      */
     @GetMapping("all")
     @Operation(summary = "Получение информации о всех задачах")
-    public ResponseEntity<List<TaskDTO>> getAll() {
-        List<TaskDTO> tasks = service.getAllDTO();
+    public ResponseEntity<List<TaskDTO>> getAll(@RequestParam @Min(0) int page, @RequestParam @Min(1) @Max(10000) int size) {
+        List<TaskDTO> tasks = service.getAllDTO(page, size);
         return ResponseEntity.ok(tasks);
     }
 

@@ -6,6 +6,7 @@ import com.pavel_fomchenkov.tasktracker.mapper.TaskMapper;
 import com.pavel_fomchenkov.tasktracker.model.*;
 import com.pavel_fomchenkov.tasktracker.repository.TaskRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -59,8 +60,8 @@ public class TaskServiceImpl implements TaskService {
      * @return задачи
      */
     @Override
-    public List<TaskDTO> getAllDTO() {
-        return repository.findAllDTO();
+    public List<TaskDTO> getAllDTO(int page, int size) {
+        return repository.findAllDTO(PageRequest.of(page, size));
     }
 
     /**
