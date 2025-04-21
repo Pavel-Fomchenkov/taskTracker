@@ -2,6 +2,7 @@ package com.pavel_fomchenkov.tasktracker.controller;
 
 import com.pavel_fomchenkov.tasktracker.dto.TaskDTO;
 import com.pavel_fomchenkov.tasktracker.dto.TaskDTOWithComments;
+import com.pavel_fomchenkov.tasktracker.exception.TaskNotFoundException;
 import com.pavel_fomchenkov.tasktracker.mapper.TaskMapper;
 import com.pavel_fomchenkov.tasktracker.model.Status;
 import com.pavel_fomchenkov.tasktracker.model.Task;
@@ -9,13 +10,13 @@ import com.pavel_fomchenkov.tasktracker.service.TaskService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Nullable;
-import jakarta.persistence.Enumerated;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/task")
@@ -95,9 +96,7 @@ public class TaskController {
         return ResponseEntity.ok(tasksDTOWithComments);
     }
 
-//    TODO сделать получение задач по id исполнителя
 //    TODO сделать получение задач по статусу
-//    TODO сделать получение задач по статусу и id исполнителя
 //    TODO убедиться что методы получения задач со статусом корректно возвращают исполнителей и комменты
 //    TODO из репозитория нужно убрать запросы в базу с указанием конкретного репозитория
 //    TODO нужно запретить любому пользователю удалять любые задачи, а не только свои. Любые задачи может удалять только ADMIN
@@ -144,7 +143,6 @@ public class TaskController {
     }
 
 //    DELETE
-
     /**
      * Удаление задачи
      *
@@ -154,7 +152,17 @@ public class TaskController {
     @DeleteMapping()
     @Operation(summary = "Удаление задачи")
     public ResponseEntity<String> delete(@RequestParam Long id) {
-        service.deleteTask(id);
-        return ResponseEntity.ok("Задача id " + id + " отсутствует в базе данных");
+        try {
+            service.deleteTask(id);
+        } catch (AccessDeniedException e) {
+            return ResponseEntity
+                    .status(HttpStatus.FORBIDDEN)
+                    .body(e.getMessage());
+        } catch (TaskNotFoundException e) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(e.getMessage());
+        }
+        return ResponseEntity.ok("Задача id " + id + " удалена из базы данных");
     }
 }

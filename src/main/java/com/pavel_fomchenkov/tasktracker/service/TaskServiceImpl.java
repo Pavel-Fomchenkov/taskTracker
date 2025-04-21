@@ -1,12 +1,12 @@
 package com.pavel_fomchenkov.tasktracker.service;
 
 import com.pavel_fomchenkov.tasktracker.dto.TaskDTO;
-import com.pavel_fomchenkov.tasktracker.dto.TaskDTOWithComments;
 import com.pavel_fomchenkov.tasktracker.exception.TaskNotFoundException;
 import com.pavel_fomchenkov.tasktracker.mapper.TaskMapper;
 import com.pavel_fomchenkov.tasktracker.model.*;
 import com.pavel_fomchenkov.tasktracker.repository.TaskRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +18,7 @@ import java.util.*;
 public class TaskServiceImpl implements TaskService {
     private final TaskRepository repository;
     private final UserService userService;
+    private final CommentService commentService;
     private final TaskMapper mapper;
 
     /**
@@ -201,13 +202,28 @@ public class TaskServiceImpl implements TaskService {
         return tasks;
     }
 
-
     /**
      * Удаление задачи по id
      * <p>
      */
     @Override
+    @Transactional
     public void deleteTask(Long id) {
+        Task taskFromBD = getById(id);
+        if (taskFromBD == null) {
+            throw new TaskNotFoundException("Задача id " + id + " не найдена в базе данных");
+        }
+
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        boolean isAuthor = taskFromBD.getAuthor().getUsername().equals(username);
+        boolean isAdmin = SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream()
+                .anyMatch(r -> r.getAuthority().equals("ROLE_ADMIN"));
+
+        if (!isAdmin && !isAuthor) {
+            throw new AccessDeniedException("Отсутсует доступ к задаче");
+        }
+
+        taskFromBD.getComments().stream().mapToLong(Comment::getId).forEach(commentService::deleteComment);
         repository.deleteById(id);
     }
 
