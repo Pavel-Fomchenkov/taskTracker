@@ -45,6 +45,7 @@ public class TaskController {
 
     /**
      * Получение списка всех задач
+     *
      * @param page номер страницы (offset)
      * @param size лимит выдачи
      * @return задачи
@@ -59,13 +60,16 @@ public class TaskController {
     /**
      * Получение задач по статусу
      *
-     * @param status статус
+     * @param status статус задачи
+     * @param page   номер страницы (offset/size)
+     * @param size   лимит выдачи
      * @return задачи
      */
     @GetMapping("status")
     @Operation(summary = "Получение информации о задачах с указанным статусом")
-    public ResponseEntity<List<TaskDTO>> getByStatus(@RequestParam Status status) {
-        List<TaskDTO> tasks = service.getByStatusDTO(status);
+    public ResponseEntity<List<TaskDTO>> getByStatus(@RequestParam Status status, @RequestParam @Min(0) int page,
+                                                     @RequestParam @Min(1) @Max(10000) int size) {
+        List<TaskDTO> tasks = service.getByStatusDTO(status, page, size);
         return ResponseEntity.ok(tasks);
     }
 

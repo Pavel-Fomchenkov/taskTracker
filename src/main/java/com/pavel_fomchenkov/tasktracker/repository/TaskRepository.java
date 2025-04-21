@@ -28,7 +28,7 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     @Query("SELECT t FROM Task t JOIN t.performers p WHERE p.id = :performerId AND t.status = :status")
     List<Task> findByPerformerIdAndStatus(Long performerId, Status status);
 
-    List<Task> findByStatus(Status status);
+    List<Task> findByStatus(Status status, Pageable pageable);
 
 }
 
