@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -200,6 +201,11 @@ public class TaskServiceImpl implements TaskService {
     public List<Task> getByPerformerIdAndStatus(Long performerId, Status status) {
         List<Task> tasks = repository.findByPerformerIdAndStatus(performerId, status);
         return tasks;
+    }
+
+    @Override
+    public List<TaskDTO> getByStatusDTO(Status status) {
+        return repository.findByStatus(status).stream().map(mapper::mapToTaskDTO).collect(Collectors.toList());
     }
 
     /**

@@ -36,6 +36,8 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     @Query("SELECT t FROM Task t JOIN t.performers p WHERE p.id = :performerId AND t.status = :status")
     List<Task> findByPerformerIdAndStatus(Long performerId, Status status);
 
+    List<Task> findByStatus(Status status);
+
 //    @Query(value = "SELECT new com.pavel_fomchenkov.tasktracker.dto.TaskDTOWithComments(t.id, u.username, " +
 //            "t.startDate, t.finishDate, t.description, t.status, t.priority)" +
 //            " FROM Task t LEFT JOIN t.author u WHERE t.id = :id ")

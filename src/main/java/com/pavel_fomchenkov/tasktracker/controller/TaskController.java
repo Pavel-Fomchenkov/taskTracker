@@ -54,6 +54,19 @@ public class TaskController {
     }
 
     /**
+     * Получение задач по статусу
+     *
+     * @param status статус
+     * @return задачи
+     */
+    @GetMapping("status")
+    @Operation(summary = "Получение информации о задачах с указанным статусом")
+    public ResponseEntity<List<TaskDTO>> getByStatus(@RequestParam Status status) {
+        List<TaskDTO> tasks = service.getByStatusDTO(status);
+        return ResponseEntity.ok(tasks);
+    }
+
+    /**
      * Получение задачи по id
      *
      * @param id id
@@ -99,7 +112,6 @@ public class TaskController {
 //    TODO сделать получение задач по статусу
 //    TODO убедиться что методы получения задач со статусом корректно возвращают исполнителей и комменты
 //    TODO из репозитория нужно убрать запросы в базу с указанием конкретного репозитория
-//    TODO нужно запретить любому пользователю удалять любые задачи, а не только свои. Любые задачи может удалять только ADMIN
 //    UPDATE
 
     /**
@@ -143,6 +155,7 @@ public class TaskController {
     }
 
 //    DELETE
+
     /**
      * Удаление задачи
      *

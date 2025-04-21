@@ -104,4 +104,11 @@ public interface TaskService {
      * @return задача
      */
     List<Task> getByPerformerIdAndStatus(Long performerId, Status status);
+
+    /**
+     * Получение задач по статусу
+     *
+     * @return задачи
+     */
+    List<TaskDTO> getByStatusDTO(Status status);
 }
