@@ -6,12 +6,14 @@ import com.pavel_fomchenkov.tasktracker.mapper.TaskMapper;
 import com.pavel_fomchenkov.tasktracker.model.*;
 import com.pavel_fomchenkov.tasktracker.repository.TaskRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -58,8 +60,8 @@ public class TaskServiceImpl implements TaskService {
      * @return задачи
      */
     @Override
-    public List<TaskDTO> getAllDTO() {
-        return repository.findAllDTO();
+    public List<TaskDTO> getAllDTO(int page, int size) {
+        return repository.findAllDTO(PageRequest.of(page, size));
     }
 
     /**
@@ -203,6 +205,19 @@ public class TaskServiceImpl implements TaskService {
     }
 
     /**
+     * Получение задач по статусу
+     *
+     * @param status статус задачи
+     * @param page   номер страницы (offset/size)
+     * @param size   лимит выдачи
+     * @return задачи
+     */
+    @Override
+    public List<TaskDTO> getByStatusDTO(Status status, int page, int size) {
+        return repository.findByStatus(status, PageRequest.of(page, size)).stream().map(mapper::mapToTaskDTO).collect(Collectors.toList());
+    }
+
+    /**
      * Удаление задачи по id
      * <p>
      */
@@ -214,13 +229,10 @@ public class TaskServiceImpl implements TaskService {
             throw new TaskNotFoundException("Задача id " + id + " не найдена в базе данных");
         }
 
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        boolean isAuthor = taskFromBD.getAuthor().getUsername().equals(username);
-        boolean isAdmin = SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream()
-                .anyMatch(r -> r.getAuthority().equals("ROLE_ADMIN"));
+        boolean isAuthor = taskFromBD.getAuthor().getUsername().equals(getCurrentUserName());
 
-        if (!isAdmin && !isAuthor) {
-            throw new AccessDeniedException("Отсутсует доступ к задаче");
+        if (!isAdmin() && !isAuthor) {
+            throw new AccessDeniedException("Отсутствует доступ к задаче");
         }
 
         taskFromBD.getComments().stream().mapToLong(Comment::getId).forEach(commentService::deleteComment);

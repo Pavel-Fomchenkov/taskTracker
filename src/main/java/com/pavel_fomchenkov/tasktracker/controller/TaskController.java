@@ -10,6 +10,8 @@ import com.pavel_fomchenkov.tasktracker.service.TaskService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Nullable;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,12 +46,30 @@ public class TaskController {
     /**
      * Получение списка всех задач
      *
+     * @param page номер страницы (offset)
+     * @param size лимит выдачи
      * @return задачи
      */
     @GetMapping("all")
     @Operation(summary = "Получение информации о всех задачах")
-    public ResponseEntity<List<TaskDTO>> getAll() {
-        List<TaskDTO> tasks = service.getAllDTO();
+    public ResponseEntity<List<TaskDTO>> getAll(@RequestParam @Min(0) int page, @RequestParam @Min(1) @Max(10000) int size) {
+        List<TaskDTO> tasks = service.getAllDTO(page, size);
+        return ResponseEntity.ok(tasks);
+    }
+
+    /**
+     * Получение задач по статусу
+     *
+     * @param status статус задачи
+     * @param page   номер страницы (offset/size)
+     * @param size   лимит выдачи
+     * @return задачи
+     */
+    @GetMapping("status")
+    @Operation(summary = "Получение информации о задачах с указанным статусом")
+    public ResponseEntity<List<TaskDTO>> getByStatus(@RequestParam Status status, @RequestParam @Min(0) int page,
+                                                     @RequestParam @Min(1) @Max(10000) int size) {
+        List<TaskDTO> tasks = service.getByStatusDTO(status, page, size);
         return ResponseEntity.ok(tasks);
     }
 
@@ -99,7 +119,6 @@ public class TaskController {
 //    TODO сделать получение задач по статусу
 //    TODO убедиться что методы получения задач со статусом корректно возвращают исполнителей и комменты
 //    TODO из репозитория нужно убрать запросы в базу с указанием конкретного репозитория
-//    TODO нужно запретить любому пользователю удалять любые задачи, а не только свои. Любые задачи может удалять только ADMIN
 //    UPDATE
 
     /**
@@ -143,6 +162,7 @@ public class TaskController {
     }
 
 //    DELETE
+
     /**
      * Удаление задачи
      *

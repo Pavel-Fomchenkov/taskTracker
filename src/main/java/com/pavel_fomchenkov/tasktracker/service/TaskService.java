@@ -1,12 +1,10 @@
 package com.pavel_fomchenkov.tasktracker.service;
 
 import com.pavel_fomchenkov.tasktracker.dto.TaskDTO;
-import com.pavel_fomchenkov.tasktracker.dto.TaskDTOWithComments;
 import com.pavel_fomchenkov.tasktracker.model.Status;
 import com.pavel_fomchenkov.tasktracker.model.Task;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface TaskService {
     /**
@@ -26,9 +24,11 @@ public interface TaskService {
     /**
      * Получение списка всех задач
      *
+     * @param page номер страницы (offset/size)
+     * @param size лимит выдачи
      * @return задачи
      */
-    List<TaskDTO> getAllDTO();
+    List<TaskDTO> getAllDTO(int page, int size);
 
     /**
      * Получение задачи по id
@@ -104,4 +104,14 @@ public interface TaskService {
      * @return задача
      */
     List<Task> getByPerformerIdAndStatus(Long performerId, Status status);
+
+    /**
+     * Получение задач по статусу
+     *
+     * @param status статус задачи
+     * @param page   номер страницы (offset/size)
+     * @param size   лимит выдачи
+     * @return задачи
+     */
+    List<TaskDTO> getByStatusDTO(Status status, int page, int size);
 }
